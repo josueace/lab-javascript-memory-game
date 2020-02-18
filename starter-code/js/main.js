@@ -27,7 +27,15 @@ const cards = [
 
 const memoryGame = new MemoryGame(cards);
 
-window.addEventListener("load", event => {
+
+
+
+
+
+
+
+
+ $(document).ready( ()=>{
   let html = "";
   memoryGame.cards.forEach(pic => {
     html += `<div class="card" data-card-name="${pic.name}">`;
@@ -40,10 +48,47 @@ window.addEventListener("load", event => {
   document.querySelector("#memory_board").innerHTML = html;
 
   // Bind the click event of each element to a function
-  document.querySelectorAll(".card").forEach(card => {
-    card.addEventListener("click", () => {
-      // TODO: write some code here
-      console.log(`Card clicked: ${card}`);
+
+var count=0;
+  $("#memory_board > div").click(function(){
+
+      $(this).addClass('turned');
+
+      if(count <2){
+
+      memoryGame.pickedCards[count] =this;
+      count++;
+    
+   
+      } else{
+       
+        count =0;
+             if(memoryGame.checkIfPair($(memoryGame.pickedCards[0]).attr('data-card-name'),$(memoryGame.pickedCards[1]).attr('data-card-name'))){
+             
+             } else{
+               
+              $(memoryGame.pickedCards).toggleClass('turned');
+
+             }
+             
+             memoryGame.pickedCards[count] =this;
+             count++;
+
+             
+          }
+   
+    if(memoryGame.isFinished()){
+      alert("end of game");
+    }
+    score();
     });
+    
   });
-});
+
+function score(){
+  var clicked= document.getElementById("pairs_clicked");
+  clicked.innerHTML=memoryGame.pairsClicked;
+  var guessed= document.getElementById("pairs_guessed");
+  guessed.innerHTML=memoryGame.pairsGuessed;
+  
+}
